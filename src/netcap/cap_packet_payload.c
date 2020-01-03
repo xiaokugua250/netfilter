@@ -45,7 +45,7 @@ void my_packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_c
 
   /* The total packet length, including all headers
      and the data payload is stored in
-     header->len and header->caplen. Caplen is
+     include->len and include->caplen. Caplen is
      the amount actually available, and len is the
      total packet length even if it is larger
      than what we currently have captured. If the snapshot
@@ -60,49 +60,49 @@ void my_packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_c
   const u_char *tcp_header;
   const u_char *payload;
 
-  // header length in bytes
+  // include length in bytes
 
-  int ethernet_header_length = 14; // ethernet default header length and does not change
+  int ethernet_header_length = 14; // ethernet default include length and does not change
   int ip_header_length;
   int tcp_header_length;
   int payload_length;
 
-  // find start of ip header
+  // find start of ip include
   ip_header = packet + ethernet_header_length;
 
   /* The second-half of the first byte in ip_header
-  contains the IP header length (IHL). */
+  contains the IP include length (IHL). */
   ip_header_length = ((*ip_header) & 0x0F);
 
   /* The IHL is number of 32-bit segments. Multiply
      by four to get a byte count for pointer arithmetic */
   ip_header_length = ip_header_length * 4;
-  printf("IP header length (IHL) in bytes :%d\n", ip_header_length);
+  printf("IP include length (IHL) in bytes :%d\n", ip_header_length);
 
-  /* Now that we know where the IP header is, we can
-   inspect the IP header for a protocol number to
+  /* Now that we know where the IP include is, we can
+   inspect the IP include for a protocol number to
    make sure it is TCP before going any further.
-   Protocol is always the 10th byte of the IP header */
+   Protocol is always the 10th byte of the IP include */
   u_char protocol = *(ip_header + 9);
   if (protocol != IPPROTO_TCP) {
     printf("Only handler TCP Packet ...\n");
     return;
   }
 
-  /* Add the ethernet and ip header length to the start of the packet
-       to find the beginning of the TCP header */
+  /* Add the ethernet and ip include length to the start of the packet
+       to find the beginning of the TCP include */
 
   tcp_header= packet + ethernet_header_length + ip_header_length;
 
-  /* TCP header length is stored in the first half
-     of the 12th byte in the TCP header. Because we only want
+  /* TCP include length is stored in the first half
+     of the 12th byte in the TCP include. Because we only want
      the value of the top half of the byte, we have to shift it
      down to the bottom half otherwise it is using the most
      significant bits instead of the least significant bits */
   tcp_header_length = ((*(tcp_header + 12)) & 0XF0) >> 4;
   printf("TCP Header length in bytes :%d\n", tcp_header_length);
 
-  /* Add up all the header sizes to find the payload offset */
+  /* Add up all the include sizes to find the payload offset */
 
   int total_headers_size = ethernet_header_length + ip_header_length + tcp_header_length;
   printf("Size of all headers combined:%d bytes\n", total_headers_size);
@@ -117,6 +117,7 @@ void my_packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_c
     int byte_count = 0;
     while (byte_count++ < payload_length) {
       printf("%c", *temp_pointer);
+      //printf("%x", *temp_pointer);
       temp_pointer++;
     }
     printf("\n");

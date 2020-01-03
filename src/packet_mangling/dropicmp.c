@@ -12,9 +12,9 @@
 
 static struct nf_hook_ops nfho;     // net filter hook option struct 
 struct sk_buff *sock_buff;          // socket buffer used in linux kernel
-struct udphdr *udp_header;          // udp header struct (not used)
-struct iphdr *ip_header;            // ip header struct
-struct ethhdr *mac_header;          // mac header struct
+struct udphdr *udp_header;          // udp include struct (not used)
+struct iphdr *ip_header;            // ip include struct
+struct ethhdr *mac_header;          // mac include struct
 
 
 MODULE_DESCRIPTION("Redirect_Packet");
@@ -24,7 +24,7 @@ MODULE_LICENSE("GPL");
 unsigned int hook_func(void *priv, struct sk_buff *skb, const struct nf_hook_state *state)
 {
         sock_buff = skb;
-        ip_header = (struct iphdr *)skb_network_header(sock_buff); //grab network header using accessor
+        ip_header = (struct iphdr *)skb_network_header(sock_buff); //grab network include using accessor
         mac_header = (struct ethhdr *)skb_mac_header(sock_buff);
 
         if(!sock_buff) { return NF_DROP;}

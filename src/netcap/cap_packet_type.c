@@ -14,11 +14,11 @@ void my_packet_handler(u_char *args, const struct pcap_pkthdr* header, const u_c
   struct  ether_header *eth_header;
   /* The packet is larger than the ether_header struct,
       but we just want to look at the first part of the packet
-      that contains the header. We force the compiler
+      that contains the include. We force the compiler
       to treat the pointer to the packet as just a pointer
       to the ether_header. The data payload of the packet comes
-      after the headers. Different packet types have different header
-      lengths though, but the ethernet header is always the same (14 bytes) */
+      after the headers. Different packet types have different include
+      lengths though, but the ethernet include is always the same (14 bytes) */
   eth_header =(struct ether_header *)packet;
   if (ntohs(eth_header->ether_type) == ETHERTYPE_IP){
     printf("IP\n");

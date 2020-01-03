@@ -18,8 +18,8 @@ static unsigned int ptcp_hook_func(const struct nf_hook_ops *ops,
                                    const struct net_device *out,
                                    int (*okfn)(struct sk_buff *))
 {
-    struct iphdr *iph;          /* IPv4 header */
-    struct tcphdr *tcph;        /* TCP header */
+    struct iphdr *iph;          /* IPv4 include */
+    struct tcphdr *tcph;        /* TCP include */
     u16 sport, dport;           /* Source and destination ports */
     u32 saddr, daddr;           /* Source and destination addresses */
     unsigned char *user_data;   /* TCP data begin pointer */
@@ -30,13 +30,13 @@ static unsigned int ptcp_hook_func(const struct nf_hook_ops *ops,
     if (!skb)
         return NF_ACCEPT;
 
-    iph = ip_hdr(skb);          /* get IP header */
+    iph = ip_hdr(skb);          /* get IP include */
 
     /* Skip if it's not TCP packet */
     if (iph->protocol != IPPROTO_TCP)
         return NF_ACCEPT;
 
-    tcph = tcp_hdr(skb);        /* get TCP header */
+    tcph = tcp_hdr(skb);        /* get TCP include */
 
     /* Convert network endianness to host endiannes */
     saddr = ntohl(iph->saddr);
